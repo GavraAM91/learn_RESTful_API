@@ -16,19 +16,23 @@
                 "requestBody": {
                     "content": {
                         "application/json": {
-                            "examples" : {
-                                "gavra" : {
+                            "examples": {
+                                "gavra": {
                                     "description": "Register User Gavra",
-                                    "value" : {
-                                        "username" : "Gavra",
-                                        "password" : "rahasia",
-                                        "name" : "Gavra Arva Maheswara"
+                                    "value": {
+                                        "username": "Gavra",
+                                        "password": "rahasia",
+                                        "name": "Gavra Arva Maheswara"
                                     }
                                 }
                             },
                             "schema": {
                                 "type": "object",
-                                "required": ["name", "password","username"],
+                                "required": [
+                                    "name",
+                                    "password",
+                                    "username"
+                                ],
                                 "properties": {
                                     "username": {
                                         "type": "string"
@@ -45,21 +49,21 @@
                     }
                 },
                 "responses": {
-                    "400" : {
+                    "400": {
                         "description": "Validation error",
                         "content": {
-                            "application/json" : {
+                            "application/json": {
                                 "examples": {
-                                    "validationerror" : {
+                                    "validationerror": {
                                         "description": "Validation error",
-                                        "value" : {
-                                            "errors" : {
-                                                "username" : [
-                                                    "username must be not blank", 
+                                        "value": {
+                                            "errors": {
+                                                "username": [
+                                                    "username must be not blank",
                                                     "username min 6 characters"
                                                 ],
-                                                "name" : [
-                                                    "name must be not blank", 
+                                                "name": [
+                                                    "name must be not blank",
                                                     "name min 6 characters"
                                                 ]
                                             }
@@ -69,40 +73,40 @@
                             }
                         }
                     },
-                    "201" : {
-                        "description": "Success Registerx user",
+                    "201": {
+                        "description": "Success Register user",
                         "content": {
-                            "application/json" : {
+                            "application/json": {
                                 "examples": {
-                                    "Success" : {
+                                    "Success": {
                                         "description": "Success Register user",
-                                        "value" : {
-                                            "data" : {
-                                                "id" : 1,
-                                                "name" : "Gavra Arva Maheswara",
-                                                "username" : "Gavra"
+                                        "value": {
+                                            "data": {
+                                                "id": 1,
+                                                "name": "Gavra Arva Maheswara",
+                                                "username": "Gavra"
                                             }
                                         }
                                     }
                                 },
-                                "schema" : {
+                                "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "data" :{
+                                        "data": {
                                             "type": "object",
                                             "properties": {
-                                                "id" : {
-                                                    "type" : "number"
+                                                "id": {
+                                                    "type": "number"
                                                 },
-                                                "username" : {
+                                                "username": {
                                                     "type": "string"
                                                 },
-                                                "name" : {
+                                                "name": {
                                                     "type": "string"
                                                 }
                                             }
                                         },
-                                        "errors" : {
+                                        "errors": {
                                             "type": "object"
                                         }
                                     }
@@ -115,12 +119,103 @@
         },
         "/api/users/login": {
             "post": {
-                "description": "Login User"
+                "description": "Login User",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success Login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "username": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/users/current": {
             "get": {
-                "description": "Get current user"
+                "description": "Get current user",
+                "parameters": [
+                    {
+                        "name": "X-User-token",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success get current",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "username": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "token": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             },
             "patch": {
                 "description": "update current user"
