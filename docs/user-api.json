@@ -178,13 +178,13 @@
                 "description": "Get current user",
                 "parameters": [
                     {
-                        "name": "X-User-token",
+                        "name": "Authorization",
                         "in": "header"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success get current",
+                        "description": "Success get current user",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -201,9 +201,6 @@
                                                 },
                                                 "name": {
                                                     "type": "string"
-                                                },
-                                                "token": {
-                                                    "type": "string"
                                                 }
                                             }
                                         },
@@ -218,12 +215,93 @@
                 }
             },
             "patch": {
-                "description": "update current user"
+                "description": "update current user",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update current user",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success update current user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "number"
+                                                },
+                                                "username": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/users/logout": {
             "delete": {
-                "description": "Logout current users"
+                "description": "Logout current users",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success logout current user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
