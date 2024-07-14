@@ -12,8 +12,8 @@ class Contact extends Model
     protected $primaryKey = "id";
     protected $KeyType = "int";
     protected $table = "contacts";
-    protected $incrementing = true;
-    protected $timestamps = true;
+    public $incrementing = true;
+    public $timestamps = true;
 
     public function user(): BelongsTo {
         return $this->belongsTo(Contact::class, "user_id", "id");
