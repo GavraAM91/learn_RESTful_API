@@ -11,22 +11,69 @@ class UserTest extends TestCase
     public function testRegisterSuccess()
     {
         $this->post('/api/users', [
-            'username' => "gavra",
-            'password' => "rahasia",
-            'name' => "gavra arva maheswara",
+            'username' => 'Gavra',
+            'password' => 'rahasia',
+            'name' => 'Gavra arva maheswara',
         ])->assertStatus(201)
             ->assertJson([
                 "data" => [
-                    "username" => "Gavra",
-                    'name' => "Gavra Arva Maheswara"
+                    'username' => 'Gavra',
+                    'name' => 'Gavra arva maheswara'
                 ]
             ]);
     }
 
-    // public function testRegisterFailed()
+    // public function testRegisterSuccess()
     // {
+    //     $this->post('/api/users', [
+    //         'username' => 'Gavra',
+    //         'password' => 'rahasia',
+    //         'name' => 'Gavra arva maheswara'
+    //     ])->assertStatus(201)
+    //         ->assertJson([
+    //             "data" => [
+    //                 'username' => 'Gavra',
+    //                 'name' => 'Gavra arva maheswara'
+    //             ]
+    //         ]);
     // }
-    // public function testRegisterUsernameAlreadyExist()
-    // {
-    // }
+
+
+    public function testRegisterFailed()
+    {
+        $this->post('/api/users', [
+            'username' => '',
+            'password' => '',
+            'name' => '',
+        ])->assertStatus(400)
+            ->assertJson([
+                "errors" => [
+                    'username' => [
+                        "The username field is required."
+                    ],
+                    'password' => [
+                        "The password field is required."
+                    ],
+                    'name' => [
+                        "The name field is required."
+                    ]
+                ]
+            ]);
+    }
+    public function testRegisterUsernameAlreadyExist()
+    {
+        $this->testRegisterSuccess();
+        $this->post('/api/users', [
+            'username' => 'Gavra',
+            'password' => 'rahasia',
+            'name' => 'Gavra arva maheswara',
+        ])->assertStatus(400)
+            ->assertJson([
+                "errors" => [
+                    'username' => [
+                        'Username Already Registered',
+                    ]
+                ]
+            ]);
+    }
 }
