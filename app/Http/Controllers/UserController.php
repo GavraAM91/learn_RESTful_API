@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,9 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Database\Eloquent\Model;
 
 class UserController extends Controller
 {
@@ -53,7 +56,7 @@ class UserController extends Controller
                     ]
                 ]
             ], 401));
-        }  
+        }
 
         $user->token = Str::uuid()->toString();
         $user->save();
@@ -61,9 +64,46 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function get(Request $requet): UserResource{
+    public function get(Request $requet): UserResource
+    {
         $user = Auth::user();
 
+        return new UserResource($user);
+    }
+
+    // public function update(UserUpdateRequest $request): UserResource
+    // {
+    //     $data = $request->validated();
+    //     $user =  User::find(Auth::id());
+
+    //     if (isset($data['name'])) {
+    //         $user->name = $data['name'];
+    //     }
+
+    //     if (isset($data['password'])) {
+    //         $user->password = Hash::make($data['password']);
+    //     }
+        
+    //     $user->save();
+    //     return new UserResource($user);
+    // }
+    public function update(UserUpdateRequest $request): UserResource
+    {
+        $data = $request->validated();
+        
+         /** @var User $user */
+        $user = Auth::user();
+
+        if (isset($data['name'])) {
+            $user->name = $data['name'];
+        }
+    
+        if (isset($data['password'])) {
+            $user->password = Hash::make($data['password']);
+        }
+    
+        $user->fill($data);
+        $user->save();
         return new UserResource($user);
     }
 }
