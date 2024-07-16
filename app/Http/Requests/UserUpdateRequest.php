@@ -13,7 +13,8 @@ class UserUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user() != null;
+        return true;
+        // return $this->user() != null;
     }
 
     /**

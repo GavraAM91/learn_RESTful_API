@@ -41,8 +41,7 @@ class User extends Model implements Authenticatable
 
     public function getAuthPasswordName()
     {
-        // return 'password';
-        return $this->password;
+        return 'password';
     }
     
     public function getAuthPassword()

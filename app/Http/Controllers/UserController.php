@@ -74,36 +74,48 @@ class UserController extends Controller
     // public function update(UserUpdateRequest $request): UserResource
     // {
     //     $data = $request->validated();
-    //     $user =  User::find(Auth::id());
+    //     // $user = Auth::user();
+    //     $user =  User::find(Auth::user());
 
-    //     if (isset($data['name'])) {
+    //     if (isset($data['name'])) { 
     //         $user->name = $data['name'];
     //     }
 
     //     if (isset($data['password'])) {
     //         $user->password = Hash::make($data['password']);
     //     }
-        
+
     //     $user->save();
     //     return new UserResource($user);
     // }
+
     public function update(UserUpdateRequest $request): UserResource
     {
         $data = $request->validated();
-        
-         /** @var User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         if (isset($data['name'])) {
             $user->name = $data['name'];
         }
-    
+
         if (isset($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
-    
-        $user->fill($data);
+
         $user->save();
         return new UserResource($user);
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+         /** @var User $user */
+        $user = Auth::user();
+        $user->token = null;
+        $user->save();
+
+        return response()->json([
+            "data" => true
+        ])->setStatusCode(200);
     }
 }

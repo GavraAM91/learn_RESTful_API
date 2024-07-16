@@ -203,9 +203,10 @@ class UserTest extends TestCase
         $this->seed([UserSeeder::class]);
         $oldUser = User::where('username', 'test')->first();
 
-        $this->patch('/api/users/current',
+        $this->patch(
+            '/api/users/current',
             [
-                'name' => 'Eko'
+                'password' => 'baru'
             ],
             [
                 'Authorization' => 'test'
@@ -214,12 +215,12 @@ class UserTest extends TestCase
             ->assertJson([
                 'data' => [
                     'username' => 'test',
-                    'name' => 'Eko'
+                    'name' => 'test'
                 ]
             ]);
 
         $newUser = User::where('username', 'test')->first();
-        self::assertNotEquals($oldUser->name, $newUser->name);
+        self::assertNotEquals($oldUser->password, $newUser->password);
     }
     public function testUpdateFailed()
     {
@@ -228,7 +229,7 @@ class UserTest extends TestCase
         $this->patch(
             '/api/users/current',
             [
-                'name' => 'estherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestherestheresther'
+                'name' => 'ekoekoekoeko'
             ],
             [
                 'Authorization' => 'test'
@@ -238,6 +239,37 @@ class UserTest extends TestCase
                 'errors' => [
                     'name' => [
                         "The name field must not be greater than 100 characters."
+                    ]
+                ]
+            ]);
+    }
+
+    public function testLogoutSuccess()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->delete(uri: '/api/users/logout', headers: [
+            'Authorization' => 'test'
+        ])->assertStatus(200)
+            ->assertJson([
+                "data" => true
+            ]);
+
+        $user = User::where('username', 'test')->first();
+        self::assertNull($user->token);
+    }
+
+    public function testLogoutFailed()
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->delete(uri: '/api/users/logout', headers: [
+            'Authorization' => 'salah'
+        ])->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        "unauthorized"
                     ]
                 ]
             ]);

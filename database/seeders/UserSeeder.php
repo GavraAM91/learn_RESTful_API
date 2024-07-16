@@ -20,5 +20,6 @@ class UserSeeder extends Seeder
             'name' => 'test',
             'token' => 'test'
         ]);
+
     }
 }

@@ -10,7 +10,7 @@
         }
     ],
     "paths": {
-        "/api/users": {
+        "/api/users": { 
             "post": {
                 "description": "Register new users",
                 "requestBody": {
